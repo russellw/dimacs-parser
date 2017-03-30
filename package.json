@@ -1,0 +1,22 @@
+{
+  "name": "dimacs-parser",
+  "version": "1.0.0",
+  "description": "Parser for the Dimacs file format",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/russellw/dimacs-parser.git"
+  },
+  "keywords": [
+    "dimacs"
+  ],
+  "author": "Russell Wallace <russell.wallace@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/russellw/dimacs-parser/issues"
+  },
+  "homepage": "https://github.com/russellw/dimacs-parser#readme"
+}
