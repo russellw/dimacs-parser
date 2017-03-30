@@ -22,7 +22,7 @@ function isdigit(c) {
 }
 
 function isspace(c) {
-	return ' \t\n\r\v'.indexOf(ch) >= 0;
+	return ' \t\n\v\r'.indexOf(ch) >= 0;
 }
 
 function lex() {
@@ -31,9 +31,9 @@ function lex() {
 		case '\n':
 			line++;
 		case ' ':
-		case '\r':
-		case '\v':
 		case '\t':
+		case '\v':
+		case '\r':
 			i++;
 			continue;
 		case '0':
@@ -62,6 +62,8 @@ function lex() {
 			continue;
 		case 'p':
 			i++;
+
+			// 'cnf'
 			while (isspace(text[i])) {
 				i++;
 			}
@@ -69,12 +71,19 @@ function lex() {
 				err("expected 'cnf'");
 			}
 			i += 3;
+
+			// Number of variables
+			while (isspace(text[i])) {
+				i++;
+			}
 			if (!isdigit(text[i])) {
 				err('expected positive number');
 			}
 			while (isdigit(text[i])) {
 				i++;
 			}
+
+			// Number of clauses
 			while (isspace(text[i])) {
 				i++;
 			}
@@ -85,6 +94,9 @@ function lex() {
 				i++;
 			}
 			continue;
+		default:
+			err('syntax error');
+			break;
 		}
 	}
 }
