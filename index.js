@@ -95,8 +95,8 @@ function lex() {
 			}
 			continue;
 		default:
-			err('syntax error');
-			break;
+			tok = text[i++];
+			return;
 		}
 	}
 }
@@ -110,6 +110,30 @@ function eat(k) {
 	}
 }
 
+function atom() {
+	if (!tok || !('1' <= tok[0] && tok[0] <= '9')) {
+		err('expected atom');
+	}
+	var a = tok;
+	lex();
+	return a;
+}
+
+function literal() {
+	if (eat('-')) {
+		return '-' + atom();
+	}
+	return atom();
+}
+
+function clause() {
+	var c = [];
+	while (tok && !eat('0')) {
+		c.push(literal());
+	}
+	return c;
+}
+
 // API
 
 function parse(t, f) {
@@ -118,6 +142,11 @@ function parse(t, f) {
 	line = 1;
 	text = t;
 	lex();
+	var cs = [];
+	while (tok) {
+		cs.push(clause());
+	}
+	return cs;
 }
 
 function read(file) {
