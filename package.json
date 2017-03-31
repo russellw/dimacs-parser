@@ -4,6 +4,11 @@
   "bugs": {
     "url": "https://github.com/russellw/dimacs-parser/issues"
   },
+  "dependencies": {
+    "commander": "^2.9.0",
+    "get-stdin": "^5.0.1",
+    "glob": "^7.1.1"
+  },
   "description": "Parser for the Dimacs file format",
   "homepage": "https://github.com/russellw/dimacs-parser#readme",
   "keywords": [
@@ -19,10 +24,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.0.0",
-  "dependencies": {
-    "commander": "^2.9.0",
-    "get-stdin": "^5.0.1",
-    "glob": "^7.1.1"
-  }
+  "version": "1.0.0"
 }
