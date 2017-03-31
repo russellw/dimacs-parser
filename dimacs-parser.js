@@ -5,6 +5,7 @@ var commander = require('commander');
 var glob = require('glob');
 var index = require('./index');
 var os = require('os');
+var stdin = require('get-stdin');
 
 // Command line
 commander.usage('[options] <files>');
@@ -24,8 +25,19 @@ if (os.platform() === 'win32') {
 		}
 	}
 }
-if (files.length) {
+switch (files.length) {
+case 0:
+	stdin(function (text) {
+		console.log(index.parse(text, 'stdin'));
+	});
+	break;
+case 1:
+	console.log(index.read(files[0]));
+	break;
+default:
 	for (var file of files) {
+		console.log(file);
 		console.log(index.read(file));
 	}
+	break;
 }
