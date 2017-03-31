@@ -2,10 +2,10 @@
 
 'use strict';
 var commander = require('commander');
+var getStdin = require('get-stdin');
 var glob = require('glob');
 var index = require('./index');
 var os = require('os');
-var stdin = require('get-stdin');
 
 // Command line
 commander.usage('[options] <files>');
@@ -27,7 +27,7 @@ if (os.platform() === 'win32') {
 }
 switch (files.length) {
 case 0:
-	stdin(function (text) {
+	getStdin().then(function (text) {
 		console.log(index.parse(text, 'stdin'));
 	});
 	break;
