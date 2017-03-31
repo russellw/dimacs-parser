@@ -94,10 +94,9 @@ function lex() {
 				i++;
 			}
 			continue;
-		default:
-			tok = text[i++];
-			return;
 		}
+		tok = text[i++];
+		return;
 	}
 }
 
