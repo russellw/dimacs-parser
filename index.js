@@ -22,7 +22,7 @@ function isdigit(c) {
 }
 
 function isspace(c) {
-	return ' \t\n\v\r'.indexOf(ch) >= 0;
+	return ' \t\n\v\r'.indexOf(c) >= 0;
 }
 
 function lex() {

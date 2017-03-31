@@ -12,22 +12,20 @@ commander.version(require('./package.json').version);
 commander.parse(process.argv);
 
 // Files
-if (commander.args.length) {
+var files = commander.args;
+if (os.platform() === 'win32') {
+	files = [];
 	for (var pattern of commander.args) {
-		var files = [
-			pattern,
-		];
-		if (os.platform() === 'win32') {
-			files = glob.sync(pattern, {
-				nonull: true,
-				nosort: true,
-			});
+		for (var file of glob.sync(pattern, {
+			nonull: true,
+			nosort: true,
+		})) {
+			files.push(file);
 		}
-		for (var file of files) {
-			console.log(file);
-			var text = fs.readFileSync(file, {
-				encoding: 'utf8',
-			});
-		}
+	}
+}
+if (files.length) {
+	for (var file of files) {
+		console.log(index.read(file));
 	}
 }
