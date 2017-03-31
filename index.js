@@ -103,13 +103,6 @@ function lex() {
 
 // Parser
 
-function eat(k) {
-	if (tok === k) {
-		lex();
-		return true;
-	}
-}
-
 function atom() {
 	if (!tok || !('1' <= tok[0] && tok[0] <= '9')) {
 		err('expected atom');
@@ -119,19 +112,26 @@ function atom() {
 	return a;
 }
 
-function literal() {
-	if (eat('-')) {
-		return '-' + atom();
-	}
-	return atom();
-}
-
 function clause() {
 	var c = [];
 	while (tok && !eat('0')) {
 		c.push(literal());
 	}
 	return c;
+}
+
+function eat(k) {
+	if (tok === k) {
+		lex();
+		return true;
+	}
+}
+
+function literal() {
+	if (eat('-')) {
+		return '-' + atom();
+	}
+	return atom();
 }
 
 // API
