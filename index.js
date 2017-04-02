@@ -118,13 +118,22 @@ function location() {
 }
 
 // Parser
+var atoms;
 
 function atom() {
 	if (!tok || !('1' <= tok[0] && tok[0] <= '9')) {
 		err('Expected atom');
 	}
-	var a = tok;
+	var name = tok;
 	lex();
+	if (atoms.has(name)) {
+		return atoms.get(name);
+	}
+	var a = {
+		name: name,
+		op: 'function',
+	};
+	atoms.set(name, a);
 	return a;
 }
 
@@ -145,7 +154,13 @@ function eat(k) {
 
 function literal() {
 	if (eat('-')) {
-		return '-' + atom();
+		var args = [
+			atom(),
+		];
+		return {
+			args: args,
+			op: '!',
+		};
 	}
 	return atom();
 }
@@ -153,6 +168,7 @@ function literal() {
 // API
 
 function parse(t, f) {
+	atoms = new Map();
 	file = f;
 	i = 0;
 	text = t;
