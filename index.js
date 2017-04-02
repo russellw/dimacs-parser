@@ -4,17 +4,18 @@ var fs = require('fs');
 // Tokenizer
 var file;
 var i;
-var line;
 var text;
 var tok;
 
 function err(msg) {
-	if (file) {
-		console.log(file + ':' + line + ': ' + msg);
-	} else {
-		console.log(line + ': ' + msg);
-	}
-	process.exit(1);
+	var loc = location();
+	msg += ' (' + loc.line + ':' + loc.column + ')';
+	var e = new SyntaxError(msg);
+	e.file = file;
+	e.loc = loc;
+	e.pos = i;
+	e.raisedAt = i;
+	throw e;
 }
 
 function isdigit(c) {
@@ -28,12 +29,11 @@ function isspace(c) {
 function lex() {
 	for (; ; ) {
 		switch (text[i]) {
-		case '\n':
-			line++;
-		case ' ':
 		case '\t':
+		case '\n':
 		case '\v':
 		case '\r':
+		case ' ':
 			i++;
 			continue;
 		case '0':
@@ -68,7 +68,7 @@ function lex() {
 				i++;
 			}
 			if (text.slice(i, i + 3) !== 'cnf') {
-				err("expected 'cnf'");
+				err("Expected 'cnf'");
 			}
 			i += 3;
 
@@ -77,7 +77,7 @@ function lex() {
 				i++;
 			}
 			if (!isdigit(text[i])) {
-				err('expected positive number');
+				err('Expected positive number');
 			}
 			while (isdigit(text[i])) {
 				i++;
@@ -88,7 +88,7 @@ function lex() {
 				i++;
 			}
 			if (!isdigit(text[i])) {
-				err('expected positive number');
+				err('Expected positive number');
 			}
 			while (isdigit(text[i])) {
 				i++;
@@ -100,11 +100,28 @@ function lex() {
 	}
 }
 
+function location() {
+	var line = 1;
+	var column = 0;
+	for (var j = 0; j < i; j++) {
+		if (text[j] === '\n') {
+			column = 0;
+			line++;
+		} else {
+			column++;
+		}
+	}
+	return {
+		column: column,
+		line: line,
+	};
+}
+
 // Parser
 
 function atom() {
 	if (!tok || !('1' <= tok[0] && tok[0] <= '9')) {
-		err('expected atom');
+		err('Expected atom');
 	}
 	var a = tok;
 	lex();
@@ -138,7 +155,6 @@ function literal() {
 function parse(t, f) {
 	file = f;
 	i = 0;
-	line = 1;
 	text = t;
 	lex();
 	var cs = [];
