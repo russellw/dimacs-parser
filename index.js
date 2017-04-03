@@ -165,7 +165,7 @@ function literal() {
 	return atom();
 }
 
-// API
+// Exports
 
 function parse(t, f) {
 	atoms = new Map();
