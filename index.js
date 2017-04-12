@@ -9,17 +9,29 @@ var text
 var tok
 
 function err(msg) {
-	var loc = location()
-	msg += ' (' + loc.line + ':' + loc.column + ')'
-	var e = new SyntaxError(msg)
-	e.file = file
-	e.loc = loc
-	e.pos = i
-	e.raisedAt = i
-	throw e
+	var r = []
+
+	// File
+	if (file)
+		r.push(file + ':')
+
+	// Line
+	var line = 1
+	for (var j = 0; j < i; j++)
+		if (text[j] === '\n')
+			line++
+	r.push(line + ': ')
+
+	// Token
+	if (tok)
+		r.push("'" + tok + "': ")
+
+	// Message
+	return r.join('') + msg
 }
 
 function lex() {
+	tok = ''
 	for (;;) {
 		switch (text[i]) {
 		case '\t':
@@ -59,14 +71,14 @@ function lex() {
 			while (iop.isspace(text[i]))
 				i++
 			if (text.slice(i, i + 3) !== 'cnf')
-				err("Expected 'cnf'")
+				throw new Error(err("Expected 'cnf'"))
 			i += 3
 
 			// Number of variables
 			while (iop.isspace(text[i]))
 				i++
 			if (!iop.isdigit(text[i]))
-				err('Expected positive number')
+				throw new Error(err('Expected positive number'))
 			while (iop.isdigit(text[i]))
 				i++
 
@@ -74,7 +86,7 @@ function lex() {
 			while (iop.isspace(text[i]))
 				i++
 			if (!iop.isdigit(text[i]))
-				err('Expected positive number')
+				throw new Error(err('Expected positive number'))
 			while (iop.isdigit(text[i]))
 				i++
 			continue
@@ -84,34 +96,19 @@ function lex() {
 	}
 }
 
-function location() {
-	var column = 0
-	var line = 1
-	for (var j = 0; j < i; j++)
-		if (text[j] === '\n') {
-			column = 0
-			line++
-		} else
-			column++
-	return {
-		column,
-		line,
-	}
-}
-
 // Parser
 var atoms
 
 function atom() {
-	if (!tok || !('1' <= tok[0] && tok[0] <= '9'))
-		err('Expected atom')
+	if (!('1' <= tok[0] && tok[0] <= '9'))
+		throw new Error(err('Expected atom'))
 	var name = tok
 	lex()
 	if (atoms.has(name))
 		return atoms.get(name)
 	var a = {
 		name,
-		op: 'function',
+		op: 'fun',
 	}
 	atoms.set(name, a)
 	return a
