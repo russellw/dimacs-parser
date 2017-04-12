@@ -1,40 +1,36 @@
 #!/usr/bin/env node
 
-'use strict';
-var commandFiles = require('command-files');
-var commander = require('commander');
-var getStdin = require('get-stdin');
-var index = require('./index');
-var util = require('util');
+'use strict'
+var commandFiles = require('command-files')
+var commander = require('commander')
+var getStdin = require('get-stdin')
+var index = require('./index')
+var iop = require('iop')
+var util = require('util')
 
-function print(a) {
-	console.log(util.inspect(a, {
-		depth: null,
-		maxArrayLength: null,
-		showHidden: false,
-	}));
+function read(file) {
+	var text = fs.readFileSync(file, 'utf8')
+	return index.parse(text, file)
 }
 
-// Command line
-commander.usage('[options] <files>');
-commander.version(require('./package.json').version);
-commander.parse(process.argv);
-
-// Files
-var files = commandFiles.expand(commander.args);
+commander.usage('[options] <files>')
+commander.version(require('./package.json').version)
+commander.parse(process.argv)
+var files = commandFiles.expand(commander.args, file => file.endsWith('.cnf'))
 switch (files.length) {
 case 0:
-	getStdin().then(function (text) {
-		print(index.parse(text, 'stdin'));
-	});
-	break;
+	getStdin().then(
+		function (text) {
+			iop.print(index.parse(text))
+		})
+	break
 case 1:
-	print(index.read(files[0]));
-	break;
+	iop.print(read(files[0]))
+	break
 default:
 	for (var file of files) {
-		console.log(file);
-		print(index.read(file));
+		console.log(file)
+		read(file)
 	}
-	break;
+	break
 }
