@@ -1,5 +1,6 @@
 'use strict'
 var fs = require('fs')
+var iop = require('iop')
 
 // Tokenizer
 var file
@@ -18,14 +19,6 @@ function err(msg) {
 	throw e
 }
 
-function isdigit(c) {
-	return '0' <= c && c <= '9'
-}
-
-function isspace(c) {
-	return ' \t\n\v\r'.indexOf(c) >= 0
-}
-
 function lex() {
 	for (;;) {
 		switch (text[i]) {
@@ -37,7 +30,7 @@ function lex() {
 			i++
 			continue
 		case '0':
-			if (isdigit(text[i + 1])) {
+			if (iop.isdigit(text[i + 1])) {
 				i++
 				continue
 			}
@@ -50,7 +43,7 @@ function lex() {
 		case '7':
 		case '8':
 		case '9':
-			for (var j = i; isdigit(text[j]); j++)
+			for (var j = i; iop.isdigit(text[j]); j++)
 				;
 			tok = text.slice(i, j)
 			i = j
@@ -63,26 +56,26 @@ function lex() {
 			i++
 
 			// 'cnf'
-			while (isspace(text[i]))
+			while (iop.isspace(text[i]))
 				i++
 			if (text.slice(i, i + 3) !== 'cnf')
 				err("Expected 'cnf'")
 			i += 3
 
 			// Number of variables
-			while (isspace(text[i]))
+			while (iop.isspace(text[i]))
 				i++
-			if (!isdigit(text[i]))
+			if (!iop.isdigit(text[i]))
 				err('Expected positive number')
-			while (isdigit(text[i]))
+			while (iop.isdigit(text[i]))
 				i++
 
 			// Number of clauses
-			while (isspace(text[i]))
+			while (iop.isspace(text[i]))
 				i++
-			if (!isdigit(text[i]))
+			if (!iop.isdigit(text[i]))
 				err('Expected positive number')
-			while (isdigit(text[i]))
+			while (iop.isdigit(text[i]))
 				i++
 			continue
 		}
@@ -143,19 +136,21 @@ function literal() {
 		var args = [atom()]
 		return {
 			args,
-			op: '!',
+			op: '~',
 		}
 	}
 	return atom()
 }
 
-// Exports
+function parse(text1, file1) {
 
-function parse(t, f) {
+	// Load
 	atoms = new Map()
-	file = f
+	file = file1
 	i = 0
-	text = t
+	text = text1
+
+	// Parse
 	lex()
 	var cs = []
 	while (tok)
@@ -163,12 +158,4 @@ function parse(t, f) {
 	return cs
 }
 
-function read(file) {
-	var text = fs.readFileSync(file, {
-		encoding: 'utf8',
-	})
-	return parse(text)
-}
-
 exports.parse = parse
-exports.read = read
