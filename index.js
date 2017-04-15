@@ -5,6 +5,7 @@ var iop = require('iop')
 // Tokenizer
 var file
 var i
+var status
 var text
 var tok
 
@@ -62,8 +63,14 @@ function lex() {
 			i = j
 			return
 		case 'c':
-			while (i < text.length && text[i] !== '\n')
-				i++
+			for (var j = i; j < text.length && text[j] !== '\n'; j++)
+				;
+			if (!status) {
+				var match = /\|\s*\w+\s*\|.*\|\s*(SAT|UNSAT)\s*\|/.exec(text.slice(i, j))
+				if (match)
+					status = match[1].toLowerCase()
+			}
+			i = j
 			continue
 		case 'p':
 			i++
@@ -146,6 +153,7 @@ function parse(text1, file1) {
 	atoms = new Map()
 	file = file1
 	i = 0
+	status = ''
 	text = text1
 
 	// Parse
@@ -153,7 +161,10 @@ function parse(text1, file1) {
 	var cs = []
 	while (tok)
 		cs.push(clause())
-	return cs
+	return {
+		clauses: cs,
+		status,
+	}
 }
 
 exports.parse = parse
