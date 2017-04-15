@@ -37,6 +37,7 @@ function lex() {
 		case '\t':
 		case '\n':
 		case '\v':
+		case '\f':
 		case '\r':
 		case ' ':
 			i++
