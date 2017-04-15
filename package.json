@@ -5,10 +5,10 @@
     "url": "https://github.com/russellw/dimacs-parser/issues"
   },
   "dependencies": {
-    "command-files": "^1.0.0",
+    "command-files": "^1.1.0",
     "commander": "^2.9.0",
     "get-stdin": "^5.0.1",
-    "iop": "^1.1.2"
+    "iop": "^1.2.0"
   },
   "description": "Parser for the Dimacs file format",
   "homepage": "https://github.com/russellw/dimacs-parser#readme",

@@ -3,10 +3,10 @@
 'use strict'
 var commandFiles = require('command-files')
 var commander = require('commander')
+var fs = require('fs')
 var getStdin = require('get-stdin')
 var index = require('./index')
 var iop = require('iop')
-var util = require('util')
 
 function read(file) {
 	var text = fs.readFileSync(file, 'utf8')
