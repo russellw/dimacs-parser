@@ -66,7 +66,7 @@ function lex() {
 			for (var j = i; j < text.length && text[j] !== '\n'; j++)
 				;
 			if (!status) {
-				var match = /\|\s*\w+\s*\|.*\|\s*(SAT|UNSAT)\s*\|/.exec(text.slice(i, j))
+				var match = /c\s*\|\s*\w+\s*\|.*\|\s*(SAT|UNSAT)\s*\|\s*$/.exec(text.slice(i, j))
 				if (match)
 					status = match[1].toLowerCase()
 			}
