@@ -1,5 +1,5 @@
 'use strict'
-var cnf = require('cnf')
+var cnf = require('clause-normal-form')
 var fs = require('fs')
 var iop = require('iop')
 
