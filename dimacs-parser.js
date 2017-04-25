@@ -16,6 +16,8 @@ function read(file) {
 commander.usage('[options] <files>')
 commander.version(require('./package.json').version)
 commander.parse(process.argv)
+if (!commander.lang && !commander.args.length && tty.isatty(process.stdin.fd))
+	process.exit(0)
 var files = commandFiles.expand(commander.args, file => file.endsWith('.cnf'))
 switch (files.length) {
 case 0:
