@@ -19,10 +19,9 @@ commander.parse(process.argv)
 var files = commandFiles.expand(commander.args, file => file.endsWith('.cnf'))
 switch (files.length) {
 case 0:
-	getStdin().then(
-		function (text) {
-			iop.print(index.parse(text))
-		})
+	getStdin().then(function (text) {
+		iop.print(index.parse(text))
+	})
 	break
 case 1:
 	iop.print(read(files[0]))

@@ -1,4 +1,5 @@
 'use strict'
+var cnf = require('cnf')
 var fs = require('fs')
 var iop = require('iop')
 
@@ -114,16 +115,13 @@ function atom() {
 	lex()
 	if (atoms.has(name))
 		return atoms.get(name)
-	var a = {
-		name,
-		op: 'fun',
-	}
+	var a = cnf.fun(name)
 	atoms.set(name, a)
 	return a
 }
 
 function clause() {
-	var c = []
+	var c = cnf.term('|')
 	while (tok && !eat('0'))
 		c.push(literal())
 	return c
@@ -137,13 +135,8 @@ function eat(k) {
 }
 
 function literal() {
-	if (eat('-')) {
-		var args = [atom()]
-		return {
-			args,
-			op: '~',
-		}
-	}
+	if (eat('-'))
+		return cnf.term('~', atom())
 	return atom()
 }
 
@@ -158,7 +151,7 @@ function parse(text1, file1) {
 
 	// Parse
 	lex()
-	var cs = []
+	var cs = cnf.term('&')
 	while (tok)
 		cs.push(clause())
 	return {
