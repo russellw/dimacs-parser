@@ -9,7 +9,7 @@ function assertEq(a, b) {
 
 function read(file) {
 	var text = fs.readFileSync(file, 'utf8')
-	return cnf.parse(text, file)
+	return index.parse(text, file)
 }
 
 it('clauses', function () {
