@@ -18,3 +18,6 @@ it('clauses', function () {
 	clauses.push(cnf.term('|', cnf.term('~', cnf.fun('3')), cnf.fun('4')))
 	assertIso(read('test.cnf').clauses, clauses)
 })
+it('status', function () {
+	assert(read('test.cnf').status === 'sat')
+})
