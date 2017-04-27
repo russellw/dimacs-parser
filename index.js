@@ -155,6 +155,7 @@ function parse(text1, file1) {
 	while (tok)
 		cs.push(clause())
 	return {
+		bytes: text1.length,
 		clauses: cs,
 		status,
 	}

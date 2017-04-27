@@ -10,6 +10,12 @@ Supplying the name of the file from which the text was read is optional; if give
 The return value is an object with the following fields:
 
 ```
+bytes
+```
+
+Total bytes read.
+
+```
 clauses
 ```
 
