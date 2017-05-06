@@ -141,7 +141,6 @@ function literal() {
 }
 
 function parse(text1, file1) {
-
 	// Load
 	atoms = new Map()
 	file = file1
