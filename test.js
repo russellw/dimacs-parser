@@ -19,5 +19,5 @@ it('clauses', function () {
 	assertIso(read('test.cnf').clauses, clauses)
 })
 it('status', function () {
-	assert(read('test.cnf').status === 'sat')
+	assert(read('test.cnf').status === 'SAT')
 })

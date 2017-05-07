@@ -69,7 +69,7 @@ function lex() {
 			if (!status) {
 				var match = /c\s*\|\s*\w+\s*\|.*\|\s*(SAT|UNSAT)\s*\|\s*$/.exec(text.slice(i, j))
 				if (match)
-					status = match[1].toLowerCase()
+					status = match[1]
 			}
 			i = j
 			continue
